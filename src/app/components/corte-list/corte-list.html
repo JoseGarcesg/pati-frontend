@@ -1,23 +1,35 @@
-<h3>Lista de Cortes</h3>
+<div class="p-4 bg-white rounded shadow-md max-w-4xl mx-auto mt-6 mb-6">
+  <h3 class="text-xl font-bold mb-4">Lista de Cortes</h3>
 
-<table >
-  <thead>
-    <tr>
-      <th>Mesa</th>
-      <th>Referencia</th>
-      <th>Material</th>
-      <th>Fecha</th>
-      <th>Cantidad</th>
-    </tr>
-  </thead>
+  <div class="overflow-x-auto">
+    <table class="min-w-full table-auto border-collapse border border-gray-300">
+      <thead class="bg-gray-100">
+        <tr>
+          <th class="border px-3 py-2 text-left">Mesa</th>
+          <th class="border px-3 py-2 text-left">Referencia</th>
+          <th class="border px-3 py-2 text-left">Material</th>
+          <th class="border px-3 py-2 text-left">Fecha</th>
+          <th class="border px-3 py-2 text-left">Cantidad</th>
+          <th class="border px-3 py-2 text-left">Detalles</th>
+        </tr>
+      </thead>
 
-  <tbody>
-    <tr *ngFor="let corte of cortes">
-      <td>{{ corte.mesa }}</td>
-      <td>{{ corte.referencia }}</td>
-      <td>{{ corte.material }}</td>
-      <td>{{ corte.fechaCorte }}</td>
-      <td>{{ corte.cantidadProgramada }}</td>
-    </tr>
-  </tbody>
-</table>
+      <tbody>
+        <tr *ngFor="let corte of cortes" class="hover:bg-gray-50 align-top">
+          <td class="border px-3 py-2">{{ corte.mesa }}</td>
+          <td class="border px-3 py-2">{{ corte.referencia }}</td>
+          <td class="border px-3 py-2">{{ corte.material }}</td>
+          <td class="border px-3 py-2">{{ corte.fechaCorte }}</td>
+          <td class="border px-3 py-2">{{ corte.cantidadProgramada }}</td>
+          <td class="border px-3 py-2">
+            <div *ngFor="let d of corte.detalles" class="flex gap-2">
+              <span class="px-1 py-0.5 bg-gray-200 rounded text-sm">
+                {{ d.talla }}/{{ d.color }}: {{ d.cantidad }}
+              </span>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

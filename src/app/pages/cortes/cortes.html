@@ -1,7 +1,6 @@
-<h2>Gestión de Cortes</h2>
 
-<app-corte-form (corteCreado)="cargarCortes()"></app-corte-form>
+<app-corte-form (corteCreado)="onCorteCreado($event)"></app-corte-form>
 
 <hr>
 
-<app-corte-list [cortes]="cortes"></app-corte-list>
+<app-corte-list [cortes]="cortes()"></app-corte-list>

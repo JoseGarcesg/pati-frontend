@@ -1,77 +1,73 @@
-<h3>Nuevo Corte</h3>
+<div class="p-4 bg-white rounded shadow-md max-w-3xl mx-auto">
+  <h3 class="text-xl font-bold mb-4">Nuevo Corte</h3>
+  <form (ngSubmit)="guardar()" class="space-y-4">
 
-<form (ngSubmit)="guardar()">
+    <!-- Mesa -->
+    <div class="flex gap-4 items-center">
+      <label class="font-semibold w-24">Mesa:</label>
+      <select [(ngModel)]="corteValue.mesa" name="mesa" class="border rounded p-1 flex-1">
+        <option *ngFor="let mesa of mesas()" [value]="mesa">{{ mesa }}</option>
+      </select>
+    </div>
 
-    <label>Mesa</label>
-    <select [(ngModel)]="corte.mesa" name="mesa">
-        <option *ngFor="let m of mesas" [value]="m">
-            {{m}}
-        </option>
-    </select>
+    <!-- Fecha -->
+    <div class="flex gap-4 items-center">
+      <label class="font-semibold w-24">Fecha:</label>
+      <input type="date" [(ngModel)]="corteValue.fechaCorte" name="fechaCorte" class="border rounded p-1 flex-1" />
+    </div>
 
-    <br><br>
+    <!-- Referencia -->
+    <div class="flex gap-4 items-center">
+      <label class="font-semibold w-24">Referencia:</label>
+      <select [(ngModel)]="corteValue.referencia" name="referencia" class="border rounded p-1 flex-1">
+        <option *ngFor="let ref of referencias()" [value]="ref">{{ ref }}</option>
+      </select>
+    </div>
 
-    <label>Fecha Corte</label>
-    <input type="date" [(ngModel)]="corte.fechaCorte" name="fechaCorte">
+    <!-- Material -->
+    <div class="flex gap-4 items-center">
+      <label class="font-semibold w-24">Material:</label>
+      <select [(ngModel)]="corteValue.material" name="material" class="border rounded p-1 flex-1">
+        <option *ngFor="let mat of materiales()" [value]="mat">{{ mat }}</option>
+      </select>
+    </div>
 
-    <br><br>
+    <!-- Cantidad programada -->
+    <div class="flex gap-4 items-center">
+      <label class="font-semibold w-24">Cantidad:</label>
+      <input type="number" [(ngModel)]="corteValue.cantidadProgramada" name="cantidadProgramada" class="border rounded p-1 flex-1" />
+    </div>
 
-    <label>Referencia</label>
-    <select [(ngModel)]="corte.referencia" name="referencia">
-        <option *ngFor="let r of referencias" [value]="r">
-            {{r}}
-        </option>
-    </select>
+    <hr class="my-4" />
 
-    <br><br>
+    <!-- Detalles dinámicos -->
+    <h4 class="font-bold mb-2">Detalles</h4>
+    <div *ngFor="let d of corteValue.detalles; let i = index" class="grid grid-cols-4 gap-2 items-center mb-2">
+      
+      <select [(ngModel)]="d.talla" name="talla{{i}}" class="border rounded p-1">
+        <option *ngFor="let t of tallas()" [value]="t">{{ t }}</option>
+      </select>
 
-    <label>Material</label>
-    <select [(ngModel)]="corte.material" name="material">
-        <option *ngFor="let m of materiales" [value]="m">
-            {{m}}
-        </option>
-    </select>
+      <select [(ngModel)]="d.color" name="color{{i}}" class="border rounded p-1">
+        <option *ngFor="let c of colores()" [value]="c">{{ c }}</option>
+      </select>
 
-    <br><br>
+      <input type="number" [(ngModel)]="d.cantidad" name="cantidad{{i}}" class="border rounded p-1" placeholder="Cantidad" />
 
-    <label>Cantidad Programada</label>
-    <input type="number" [(ngModel)]="corte.cantidadProgramada" name="cantidadProgramada">
+      <button type="button" (click)="eliminarDetalle(i)" class="bg-red-500 text-white rounded px-2 py-1 hover:bg-red-600">
+        Eliminar
+      </button>
+    </div>
 
-    <hr>
-
-    <h4>Detalles</h4>
-    <table>
-        <thead>
-            <tr>
-                <th>Talla</th>
-                <th>Color</th>
-                <th>Cantidad</th>
-                <th>Acciones</th>
-            </tr>
-        </thead>
-        <tbody>
-      <tr *ngFor="let d of corte.detalles; let i = index">
-        <td>
-          <select [(ngModel)]="d.talla" name="talla{{i}}">
-            <option *ngFor="let t of tallas" [value]="t">{{ t }}</option>
-          </select>
-        </td>
-        <td>
-          <select [(ngModel)]="d.color" name="color{{i}}">
-            <option *ngFor="let c of colores" [value]="c">{{ c }}</option>
-          </select>
-        </td>
-        <td><input type="number" [(ngModel)]="d.cantidad" name="cantidad{{i}}"></td>
-        <td><button type="button" (click)="eliminarDetalle(i)">Eliminar</button></td>
-      </tr>
-    </tbody>
-    </table>
-
-    <button type="button" (click)="agregarDetalle()">Agregar Detalle</button><br><br>
-
-
-    <button type="submit">
-        Guardar Corte
+    <button type="button" (click)="agregarDetalle()" class="bg-blue-500 text-white rounded px-3 py-1 hover:bg-blue-600">
+      Agregar detalle
     </button>
 
-</form>
+    <div class="mt-4">
+      <button type="submit" class="bg-green-500 text-white rounded px-4 py-2 hover:bg-green-600">
+        Enviar Corte
+      </button>
+    </div>
+
+  </form>
+</div>

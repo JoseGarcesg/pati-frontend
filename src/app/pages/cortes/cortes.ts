@@ -1,7 +1,8 @@
-import { Component,OnInit } from '@angular/core';
+import { Component,OnInit,signal } from '@angular/core';
 import { Corte as CorteService } from '../../services/corte'
 import { CorteForm } from '../../components/corte-form/corte-form';
 import { CorteList } from '../../components/corte-list/corte-list';
+import { Corte } from '../../models/corte.model';
 
 @Component({
   selector: 'app-cortes',
@@ -10,17 +11,17 @@ import { CorteList } from '../../components/corte-list/corte-list';
   styleUrl: './cortes.css',
 })
 export class Cortes implements OnInit{
-  cortes:any[] = [];
+  cortes = signal<Corte[]>([]); // signal
 
   constructor(private corteService:CorteService){}
 
   ngOnInit(): void {
-    this.cargarCortes();
+    // Traemos los cortes iniciales del backend
+    this.corteService.getCortes().subscribe(data => this.cortes.set(data));
   }
 
-  cargarCortes(){
-    this.corteService.getCortes().subscribe(data=>{
-      this.cortes = data;
-    });
+  onCorteCreado(nuevoCorte: Corte) {
+    // Actualiza la lista automáticamente
+    this.cortes.update(list => [...list, nuevoCorte]);
   }
 }
