@@ -1,0 +1,77 @@
+<h3>Nuevo Corte</h3>
+
+<form (ngSubmit)="guardar()">
+
+    <label>Mesa</label>
+    <select [(ngModel)]="corte.mesa" name="mesa">
+        <option *ngFor="let m of mesas" [value]="m">
+            {{m}}
+        </option>
+    </select>
+
+    <br><br>
+
+    <label>Fecha Corte</label>
+    <input type="date" [(ngModel)]="corte.fechaCorte" name="fechaCorte">
+
+    <br><br>
+
+    <label>Referencia</label>
+    <select [(ngModel)]="corte.referencia" name="referencia">
+        <option *ngFor="let r of referencias" [value]="r">
+            {{r}}
+        </option>
+    </select>
+
+    <br><br>
+
+    <label>Material</label>
+    <select [(ngModel)]="corte.material" name="material">
+        <option *ngFor="let m of materiales" [value]="m">
+            {{m}}
+        </option>
+    </select>
+
+    <br><br>
+
+    <label>Cantidad Programada</label>
+    <input type="number" [(ngModel)]="corte.cantidadProgramada" name="cantidadProgramada">
+
+    <hr>
+
+    <h4>Detalles</h4>
+    <table>
+        <thead>
+            <tr>
+                <th>Talla</th>
+                <th>Color</th>
+                <th>Cantidad</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+      <tr *ngFor="let d of corte.detalles; let i = index">
+        <td>
+          <select [(ngModel)]="d.talla" name="talla{{i}}">
+            <option *ngFor="let t of tallas" [value]="t">{{ t }}</option>
+          </select>
+        </td>
+        <td>
+          <select [(ngModel)]="d.color" name="color{{i}}">
+            <option *ngFor="let c of colores" [value]="c">{{ c }}</option>
+          </select>
+        </td>
+        <td><input type="number" [(ngModel)]="d.cantidad" name="cantidad{{i}}"></td>
+        <td><button type="button" (click)="eliminarDetalle(i)">Eliminar</button></td>
+      </tr>
+    </tbody>
+    </table>
+
+    <button type="button" (click)="agregarDetalle()">Agregar Detalle</button><br><br>
+
+
+    <button type="submit">
+        Guardar Corte
+    </button>
+
+</form>

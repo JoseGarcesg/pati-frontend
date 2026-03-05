@@ -1,0 +1,23 @@
+<h3>Lista de Cortes</h3>
+
+<table >
+  <thead>
+    <tr>
+      <th>Mesa</th>
+      <th>Referencia</th>
+      <th>Material</th>
+      <th>Fecha</th>
+      <th>Cantidad</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr *ngFor="let corte of cortes">
+      <td>{{ corte.mesa }}</td>
+      <td>{{ corte.referencia }}</td>
+      <td>{{ corte.material }}</td>
+      <td>{{ corte.fechaCorte }}</td>
+      <td>{{ corte.cantidadProgramada }}</td>
+    </tr>
+  </tbody>
+</table>
