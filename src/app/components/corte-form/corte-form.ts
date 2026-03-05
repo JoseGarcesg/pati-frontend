@@ -1,4 +1,4 @@
-import { Component, OnInit, signal, EventEmitter, Output} from '@angular/core';
+import { Component, OnInit, signal, computed, EventEmitter, Output } from '@angular/core';
 import { Corte as CorteService } from '../../services/corte';
 import { Corte, CorteDetalle } from '../../models/corte.model';
 import { Catalogo as CatalogoService } from '../../services/catalogo';
@@ -14,7 +14,7 @@ import { CommonModule } from '@angular/common';
 })
 export class CorteForm implements OnInit {
 
-   @Output() corteCreado = new EventEmitter<Corte>();
+  @Output() corteCreado = new EventEmitter<Corte>();
 
   // Signal para el corte actual
   corte = signal<Corte>({
@@ -22,11 +22,16 @@ export class CorteForm implements OnInit {
     fechaCorte: '',
     referencia: '',
     material: '',
-    cantidadProgramada: 0,
-    detalles: [{ talla: '', color: '', cantidad: 0 }] // detalle inicial
+    cantidadProgramada: 0, // no editable, se calculará automáticamente
+    detalles: [] // inicializamos en ngOnInit
   });
 
-  // Catálogos como signals
+  // Computed: suma de todas las cantidades de los detalles
+  cantidadTotal = computed(() =>
+    this.corte().detalles.reduce((sum, d) => sum + Number(d.cantidad || 0), 0)
+  );
+
+  // Catálogos
   referencias = signal<string[]>([]);
   materiales = signal<string[]>([]);
   tallas = signal<string[]>([]);
@@ -39,29 +44,45 @@ export class CorteForm implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    // Cargar catálogos
     this.catalogoService.getCatalogo('referencia')
       .subscribe(data => this.referencias.set(data));
-
     this.catalogoService.getCatalogo('material')
       .subscribe(data => this.materiales.set(data));
-
     this.catalogoService.getCatalogo('color')
       .subscribe(data => this.colores.set(data));
-
     this.catalogoService.getCatalogo('talla')
       .subscribe(data => this.tallas.set(data));
-
     this.catalogoService.getCatalogo('mesa')
       .subscribe(data => this.mesas.set(data));
-  }
 
-  agregarDetalle() {
+    // Inicializar detalles con primer talla/color disponible
     this.corte.update(c => ({
       ...c,
-      detalles: [...c.detalles, { talla: this.tallas()[0] || '', color: this.colores()[0] || '', cantidad: 0 }]
+      detalles: [{
+        talla: this.tallas()[0] || '',
+        color: this.colores()[0] || '',
+        cantidad: 1
+      }]
     }));
   }
 
+  // Agregar un nuevo detalle
+  agregarDetalle() {
+    this.corte.update(c => ({
+      ...c,
+      detalles: [
+        ...c.detalles,
+        {
+          talla: this.tallas()[0] || '',
+          color: this.colores()[0] || '',
+          cantidad: 1
+        }
+      ]
+    }));
+  }
+
+  // Eliminar detalle por índice
   eliminarDetalle(index: number) {
     this.corte.update(c => ({
       ...c,
@@ -69,23 +90,48 @@ export class CorteForm implements OnInit {
     }));
   }
 
+  // Cambiar cantidad de un detalle (validando >=1)
+  cambiarCantidadDetalle(index: number, cantidad: number) {
+    if (cantidad < 1) cantidad = 1;
+    this.corte.update(c => {
+      const detalles = [...c.detalles];
+      detalles[index] = { ...detalles[index], cantidad };
+      return { ...c, detalles };
+    });
+  }
+
+  // Guardar corte
   guardar() {
-    this.corteService.crearCorte(this.corte()).subscribe((nuevoCorte: Corte) => {
+    const c = this.corte();
+    // Validación simple
+    if (!c.mesa || !c.fechaCorte || !c.referencia || !c.material || c.detalles.length === 0) {
+      alert('Por favor complete todos los campos y agregue al menos un detalle.');
+      return;
+    }
+
+    // Actualizamos cantidadProgramada antes de enviar
+    const corteSend = {
+      ...c,
+      cantidadProgramada: c.detalles.reduce((sum, d) => sum + Number(d.cantidad || 0), 0)
+    };
+
+    this.corteService.crearCorte(corteSend).subscribe((nuevoCorte: Corte) => {
       alert('Corte creado correctamente!');
-      // Emitimos el corte recién creado (ya tipado como Corte)
       this.corteCreado.emit(nuevoCorte);
-      // Limpiamos el formulario
+      // Reset del formulario
       this.corte.set({
         mesa: '',
         fechaCorte: '',
         referencia: '',
         material: '',
         cantidadProgramada: 0,
-        detalles: [{ talla: this.tallas()[0] || '', color: this.colores()[0] || '', cantidad: 0 }]
+        detalles: [{
+          talla: this.tallas()[0] || '',
+          color: this.colores()[0] || '',
+          cantidad: 1
+        }]
       });
     });
   }
 
-  // Helpers para el template
-  get corteValue() { return this.corte(); }
 }
