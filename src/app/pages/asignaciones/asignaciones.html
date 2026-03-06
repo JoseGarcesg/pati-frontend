@@ -1,0 +1,146 @@
+<div class="p-6 space-y-6">
+
+  <h1 class="text-2xl font-bold">Asignaciones de Taller</h1>
+
+  <!-- FORMULARIO CREAR ASIGNACION -->
+
+  <div class="bg-white p-4 rounded shadow space-y-4">
+
+    <div class="grid grid-cols-4 gap-4">
+
+      <input
+        [(ngModel)]="nuevaAsignacion.confeccionista"
+        placeholder="Confeccionista"
+        class="border p-2 rounded w-full"
+      />
+
+      <input
+        type="date"
+        [(ngModel)]="nuevaAsignacion.fechaEstimada"
+        class="border p-2 rounded w-full"
+      />
+
+      <select
+        [(ngModel)]="nuevaAsignacion.tallerId"
+        class="border p-2 rounded w-full"
+      >
+        <option [value]="0">Seleccionar Taller</option>
+
+        <option
+          *ngFor="let t of talleres"
+          [value]="t.id"
+        >
+          {{t.nombre}}
+        </option>
+
+      </select>
+
+      <select
+        [(ngModel)]="nuevaAsignacion.corteId"
+        class="border p-2 rounded w-full"
+      >
+        <option [value]="0">Seleccionar Corte</option>
+
+        <option
+          *ngFor="let c of cortes"
+          [value]="c.id"
+        >
+          Corte {{c.id}} - {{c.referencia}} ({{c.cantidadProgramada}})
+        </option>
+
+      </select>
+
+    </div>
+
+    <button
+      (click)="crearAsignacion()"
+      class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+    >
+      Crear Asignación
+    </button>
+
+  </div>
+
+
+  <!-- TABLA DE ASIGNACIONES -->
+
+  <div class="bg-white rounded shadow overflow-hidden">
+
+    <table class="w-full text-left">
+
+      <thead class="bg-gray-100">
+
+        <tr>
+
+          <th class="p-3">ID</th>
+          <th class="p-3">Confeccionista</th>
+          <th class="p-3">Taller</th>
+          <th class="p-3">Corte</th>
+          <th class="p-3">Referencia</th>
+          <th class="p-3">Cantidad</th>
+          <th class="p-3">Fecha Estimada</th>
+          <th class="p-3">Acción</th>
+
+        </tr>
+
+      </thead>
+
+      <tbody>
+
+        <tr
+          *ngFor="let a of asignaciones()"
+          class="border-t hover:bg-gray-50"
+        >
+
+          <td class="p-3">{{a.id}}</td>
+
+          <td class="p-3">
+            {{a.confeccionista}}
+          </td>
+
+          <td class="p-3">
+            {{a.taller}}
+          </td>
+
+          <td class="p-3">
+            {{a.idCorte}}
+          </td>
+
+          <td class="p-3">
+            {{a.referencia}}
+          </td>
+
+          <td class="p-3">
+            {{a.cantidad}}
+          </td>
+
+          <td class="p-3">
+            {{a.fechaEstimada}}
+          </td>
+
+          <td class="p-3">
+
+            <button
+              (click)="eliminar(a.id)"
+              class="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600"
+            >
+              Eliminar
+            </button>
+
+          </td>
+
+        </tr>
+
+        <tr *ngIf="asignaciones().length === 0">
+          <td colspan="8" class="text-center p-6 text-gray-500">
+            No hay asignaciones registradas
+          </td>
+        </tr>
+
+      </tbody>
+
+    </table>
+
+  </div>
+
+</div>

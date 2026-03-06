@@ -1,2 +1,47 @@
+<!-- Contenido de páginas -->
+<nav class="bg-gray-800 text-white shadow-md">
+  <div class="max-w-7xl mx-auto px-4">
+    
+    <div class="flex justify-between items-center h-14">
+      
+      <!-- Logo / titulo -->
+      <div class="font-bold text-lg">
+        Sistema de Cortes
+      </div>
 
-<app-cortes></app-cortes>
+      <!-- Menu -->
+      <div class="flex space-x-6">
+        <a
+          routerLink="/cortes"
+          routerLinkActive="bg-gray-700"
+          class="px-3 py-2 rounded-md hover:bg-gray-700 transition"
+        >
+          Cortes
+        </a>
+
+        <a
+          routerLink="/talleres"
+          routerLinkActive="bg-gray-700"
+          class="px-3 py-2 rounded-md hover:bg-gray-700 transition"
+        >
+          Talleres
+        </a>
+
+        <a
+          routerLink="/asignaciones"
+          routerLinkActive="bg-gray-700"
+          class="px-3 py-2 rounded-md hover:bg-gray-700 transition"
+        >
+          Asignaciones
+        </a>
+      </div>
+
+    </div>
+
+  </div>
+</nav>
+
+<!-- Contenido de páginas -->
+<div class="p-6 bg-gray-100 min-h-screen">
+  <router-outlet></router-outlet>
+</div>

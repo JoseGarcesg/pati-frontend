@@ -6,6 +6,7 @@ export interface Corte {
   material: string;
   cantidadProgramada: number;
   detalles: CorteDetalle[];
+  estado?: string;
 }
 
 export interface CorteDetalle {

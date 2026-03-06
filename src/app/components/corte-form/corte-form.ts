@@ -41,7 +41,7 @@ export class CorteForm implements OnInit {
   constructor(
     private corteService: CorteService,
     private catalogoService: CatalogoService
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     // Cargar catálogos
@@ -69,17 +69,27 @@ export class CorteForm implements OnInit {
 
   // Agregar un nuevo detalle
   agregarDetalle() {
-    this.corte.update(c => ({
-      ...c,
-      detalles: [
-        ...c.detalles,
-        {
-          talla: this.tallas()[0] || '',
-          color: this.colores()[0] || '',
-          cantidad: 1
+    const detalles = this.corte().detalles;
+    const tallas = this.tallas();
+    const colores = this.colores();
+
+    for (let talla of tallas) {
+      for (let color of colores) {
+        const existe = detalles.some(d => d.talla === talla && d.color === color);
+
+        if (!existe) {
+          this.corte.update(c => ({
+            ...c,
+            detalles: [
+              ...c.detalles,
+              { talla, color, cantidad: 1 }
+            ]
+          }));
+          return;
         }
-      ]
-    }));
+      }
+    }
+    alert("Ya se usaron todas las combinaciones de talla y color");
   }
 
   // Eliminar detalle por índice
@@ -98,6 +108,59 @@ export class CorteForm implements OnInit {
       detalles[index] = { ...detalles[index], cantidad };
       return { ...c, detalles };
     });
+  }
+
+  detalleDuplicado(talla: string, color: string, indexActual: number): boolean {
+    const detalles = this.corte().detalles;
+
+    return detalles.some((d, i) =>
+      i !== indexActual &&
+      d.talla === talla &&
+      d.color === color
+    );
+  }
+
+  validarDetalle(index: number) {
+
+    const detalle = this.corte().detalles[index];
+
+    if (this.detalleDuplicado(detalle.talla, detalle.color, index)) {
+      alert('Ya existe un detalle con esa talla y color');
+
+      const detalles = this.corte().detalles;
+      const tallas = this.tallas();
+      const colores = this.colores();
+
+      let nuevaTalla = '';
+      let nuevoColor = '';
+
+      for (let talla of tallas) {
+        for (let color of colores) {
+
+          const existe = detalles.some((d, i) =>
+            i !== index && d.talla === talla && d.color === color
+          );
+
+          if (!existe) {
+            nuevaTalla = talla;
+            nuevoColor = color;
+            break;
+          }
+        }
+        if (nuevaTalla) break;
+      }
+
+      this.corte.update(c => {
+        const nuevos = [...c.detalles];
+
+        nuevos[index] = {
+          talla: nuevaTalla,
+          color: nuevoColor,
+          cantidad: 1
+        };
+        return { ...c, detalles: nuevos };
+      });
+    }
   }
 
   // Guardar corte

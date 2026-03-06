@@ -43,15 +43,16 @@
     <!-- Detalles -->
     <h4 class="font-bold mb-2">Detalles</h4>
     <div *ngFor="let d of corte().detalles; let i = index" class="grid grid-cols-4 gap-2 items-center mb-2">
-      <select [(ngModel)]="d.talla" name="talla{{i}}" class="border rounded p-1">
+      <select [(ngModel)]="d.talla" name="talla{{i}}" (change)="validarDetalle(i)" class="border rounded p-1">
         <option *ngFor="let t of tallas()" [value]="t">{{ t }}</option>
       </select>
 
-      <select [(ngModel)]="d.color" name="color{{i}}" class="border rounded p-1">
+      <select [(ngModel)]="d.color" name="color{{i}}" (change)="validarDetalle(i)" class="border rounded p-1">
         <option *ngFor="let c of colores()" [value]="c">{{ c }}</option>
       </select>
 
       <input type="number" [(ngModel)]="d.cantidad" 
+      
              (change)="cambiarCantidadDetalle(i, d.cantidad)" 
              name="cantidad{{i}}" class="border rounded p-1" min="1" />
 

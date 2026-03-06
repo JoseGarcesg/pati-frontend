@@ -21,6 +21,10 @@ export class Corte {
     this.getCortes().subscribe(data => this.cortes.set(data));
   }
 
+  getCortesDisponibles(): Observable<any> {
+    return this.http.get(`${this.api}/disponibles`);
+  }
+
   crearCorte(corte: any): Observable<any> {
     return new Observable(observer => {
       this.http.post(this.api, corte).subscribe({
@@ -33,5 +37,9 @@ export class Corte {
         error: err => observer.error(err)
       });
     });
+  }
+
+  actualizarEstadoCorte(id: number, estado: string): Observable<any> {
+    return this.http.patch(`${this.api}/${id}/estado/${estado}`, null);
   }
 }

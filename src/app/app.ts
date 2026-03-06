@@ -1,7 +1,6 @@
 import { Component, signal } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import { RouterOutlet ,RouterLink, RouterLinkActive} from '@angular/router';
 import { FormsModule } from '@angular/forms';
-import { Cortes } from './pages/cortes/cortes';
 
 @Component({
   selector: 'app-root',
@@ -9,7 +8,8 @@ import { Cortes } from './pages/cortes/cortes';
   imports: [
     RouterOutlet,
     FormsModule,
-    Cortes
+    RouterLink,
+    RouterLinkActive
   ],
   templateUrl: './app.html',
   styleUrl: './app.css'

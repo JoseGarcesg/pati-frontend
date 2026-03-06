@@ -1,0 +1,85 @@
+<div class="max-w-3xl mx-auto p-6">
+
+  <h2 class="text-2xl font-bold mb-6">
+    Gestión de Talleres
+  </h2>
+
+  <!-- Crear Taller -->
+
+  <div class="bg-white p-4 rounded shadow mb-6">
+
+    <h3 class="font-semibold mb-3">
+      Nuevo Taller
+    </h3>
+
+    <div class="flex gap-3">
+
+      <input
+        type="text"
+        [(ngModel)]="nuevoTaller().nombre"
+        placeholder="Nombre del taller"
+        class="border rounded px-3 py-2 flex-1"
+      />
+
+      <button
+        (click)="crearTaller()"
+        class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+      >
+        Crear
+      </button>
+
+    </div>
+
+  </div>
+
+  <!-- Lista -->
+
+  <div class="bg-white rounded shadow">
+
+    <table class="w-full border-collapse">
+
+      <thead class="bg-gray-100">
+
+        <tr>
+          <th class="border px-4 py-2 text-left">ID</th>
+          <th class="border px-4 py-2 text-left">Nombre</th>
+          <th class="border px-4 py-2 text-center">Acciones</th>
+        </tr>
+
+      </thead>
+
+      <tbody>
+
+        <tr
+          *ngFor="let taller of talleres()"
+          class="hover:bg-gray-50"
+        >
+
+          <td class="border px-4 py-2">
+            {{ taller.id }}
+          </td>
+
+          <td class="border px-4 py-2">
+            {{ taller.nombre }}
+          </td>
+
+          <td class="border px-4 py-2 text-center">
+
+            <button
+              (click)="eliminarTaller(taller.id!)"
+              class="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600"
+            >
+              Eliminar
+            </button>
+
+          </td>
+
+        </tr>
+
+      </tbody>
+
+    </table>
+
+  </div>
+
+</div>

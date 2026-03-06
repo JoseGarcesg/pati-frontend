@@ -10,6 +10,7 @@
           <th class="border px-3 py-2 text-left">Material</th>
           <th class="border px-3 py-2 text-left">Fecha</th>
           <th class="border px-3 py-2 text-left">Cantidad</th>
+          <th class="border px-3 py-2 text-left">Estado</th>
           <th class="border px-3 py-2 text-left">Detalles</th>
         </tr>
       </thead>
@@ -21,6 +22,7 @@
           <td class="border px-3 py-2">{{ corte.material }}</td>
           <td class="border px-3 py-2">{{ corte.fechaCorte }}</td>
           <td class="border px-3 py-2">{{ corte.cantidadProgramada }}</td>
+          <td class="border px-3 py-2">{{ corte.estado }}</td>
           <td class="border px-3 py-2">
             <div *ngFor="let d of corte.detalles" class="flex gap-2">
               <span class="px-1 py-0.5 bg-gray-200 rounded text-sm">
